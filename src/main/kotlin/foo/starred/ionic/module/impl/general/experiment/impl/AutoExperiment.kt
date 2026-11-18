@@ -1,6 +1,6 @@
 @file:Suppress("ObjectPrivatePropertyName", "Unused")
 
-package foo.starred.ionic.module.impl.general.experiment
+package foo.starred.ionic.module.impl.general.experiment.impl
 
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
