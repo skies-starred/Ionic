@@ -1,6 +1,6 @@
 package foo.starred.ionic.module.impl.general.experiment.solvers.impl
 
-import foo.starred.ionic.module.impl.general.experiment.AutoExperiment
+import foo.starred.ionic.module.impl.general.experiment.impl.AutoExperiment
 import foo.starred.ionic.module.impl.general.experiment.solvers.base.IExperimentSolver
 import foo.starred.kontext.api.format.extension.string.stripped
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen

@@ -7,13 +7,12 @@ import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.command.command
 import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsMod
+import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.storage.JsonStore
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
 import foo.starred.ionic.event.impl.InputEvent
 import foo.starred.ionic.event.impl.TickEvent
 import foo.starred.ionic.module.base.Module
-import foo.starred.ionic.util.leftClick
-import foo.starred.ionic.util.rightClick
 import foo.starred.kontext.abstraction.chat.generic.MinecraftChat
 import foo.starred.kontext.abstraction.chat.message.MinecraftMessages
 import foo.starred.kontext.abstraction.client.extension.client
@@ -84,7 +83,7 @@ object AutoClicker : Module(
             if (left) {
                 delay0 += `left$cps`.delay()
                 if (delay0 >= 20) {
-                    leftClick()
+                    GenericPlayerAPI.attack()
                     delay0 -= 20
                 }
             }
@@ -92,7 +91,7 @@ object AutoClicker : Module(
             if (right) {
                 delay1 += `right$cps`.delay()
                 if (delay1 >= 20) {
-                    rightClick()
+                    GenericPlayerAPI.use()
                     delay1 -= 20
                 }
             }

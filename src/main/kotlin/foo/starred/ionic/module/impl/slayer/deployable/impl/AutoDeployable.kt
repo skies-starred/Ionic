@@ -6,12 +6,12 @@ import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.command.command
 import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsMod
+import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.time.IonicScheduler
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
 import foo.starred.ionic.event.impl.SlayerEvent
 import foo.starred.ionic.module.base.Module
 import foo.starred.ionic.module.impl.slayer.deployable.data.AutoDeployableEntries
-import foo.starred.ionic.util.rightClick
 import foo.starred.kontext.abstraction.inventory.MinecraftInventory
 import foo.starred.kontext.api.scheduling.scheduler.extensions.clientTicks
 import foo.starred.kontext.api.scheduling.scheduler.extensions.start
@@ -54,7 +54,7 @@ object AutoDeployable : Module(
             MinecraftInventory.selected = found
 
             IonicScheduler.schedule(delay(clickDelay)) {
-                rightClick()
+                GenericPlayerAPI.use()
 
                 IonicScheduler.schedule(delay(swapDelay)) {
                     if (MinecraftInventory.selected != found) return@schedule

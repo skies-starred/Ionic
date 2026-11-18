@@ -3,11 +3,11 @@ package foo.starred.ionic.module.impl.general
 import com.mojang.blaze3d.platform.InputConstants
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
+import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.time.IonicScheduler
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
 import foo.starred.ionic.event.impl.InputEvent
 import foo.starred.ionic.module.base.Module
-import foo.starred.ionic.util.rightClick
 import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.kontext.abstraction.input.impl.GenericInputState
@@ -16,11 +16,7 @@ import foo.starred.kontext.api.item.extension.get
 import foo.starred.kontext.api.item.resolver.impl.GenericKontextItemDataResolver
 import foo.starred.kontext.api.scheduling.scheduler.extensions.clientTicks
 import foo.starred.kontext.api.scheduling.scheduler.extensions.start
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
-
-//? if >= 26.3
-//import net.minecraft.world.item.component.SwingAnimation
 
 @LoadableIonicModule
 @IonicModuleScope(skyblock = true)
@@ -62,18 +58,8 @@ object LeftClickEtherwarp : Module(
     }
 
     private fun action() {
-        rightClick()
-        val player = client.player ?: return
-
-        //? if >= 26.3 {
-        /*if (player.isSwinging) return
-        player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false)
-        *///? } else {
-        if (player.swinging && player.swingTime >= 0) return
-        player.swingingArm = InteractionHand.MAIN_HAND
-        player.swingTime = -1
-        player.swinging = true
-        //? }
+        GenericPlayerAPI.use()
+        GenericPlayerAPI.swing()
     }
 
     private fun ItemStack.etherwarp(): Boolean {

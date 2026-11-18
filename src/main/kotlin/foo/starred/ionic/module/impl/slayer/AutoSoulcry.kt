@@ -3,13 +3,13 @@ package foo.starred.ionic.module.impl.slayer
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.location.island.impl.PresetSkyBlockIsland
+import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.slayer.SlayerAPI
 import foo.starred.ionic.api.slayer.enums.type.impl.SlayerBoss
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
 import foo.starred.ionic.event.impl.PlayerEvent
 import foo.starred.ionic.event.impl.TickEvent
 import foo.starred.ionic.module.base.Module
-import foo.starred.ionic.util.rightClick
 import foo.starred.kbus.extensions.runWhen
 import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.kontext.abstraction.gui.MinecraftGui
@@ -49,7 +49,7 @@ object AutoSoulcry : Module(
             if (tick == -1) return@on ::tick.set((minDelay..maxDelay.coerceAtLeast(minDelay)).random())
             if (tick-- > 0) return@on
 
-            rightClick()
+            GenericPlayerAPI.use()
             reset()
         }.runWhen(detectType.state.map { 0 in it })
 
@@ -63,7 +63,7 @@ object AutoSoulcry : Module(
             if (item.get<GenericKontextItemDataResolver.UUID, String>() !in ids) return@on
             if (player.cooldowns.isOnCooldown(item)) return@on
 
-            rightClick()
+            GenericPlayerAPI.use()
         }.runWhen(detectType.state.map { 1 in it })
     }
 

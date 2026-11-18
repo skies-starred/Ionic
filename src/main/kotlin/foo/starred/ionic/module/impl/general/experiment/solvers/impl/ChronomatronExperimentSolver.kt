@@ -1,6 +1,6 @@
 package foo.starred.ionic.module.impl.general.experiment.solvers.impl
 
-import foo.starred.ionic.module.impl.general.experiment.AutoExperiment
+import foo.starred.ionic.module.impl.general.experiment.impl.AutoExperiment
 import foo.starred.ionic.module.impl.general.experiment.solvers.base.IExperimentSolver
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.core.component.DataComponents
