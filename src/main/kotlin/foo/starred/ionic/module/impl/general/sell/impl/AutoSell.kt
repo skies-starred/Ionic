@@ -42,7 +42,7 @@ object AutoSell : Module(
     private val info by config.information("Command: <red>/ionic autoSell [add|remove|list|clear]")
 
     private val filters by config.group("Filters")
-    private val skip50 by config.switch("Skip 50/50 items", true)
+    private val skip50 by filters.switch("Skip 50/50 items", true)
 
     private val json = JsonStore("feature/general/autoSell")
     val allowed = json.mutableSet("allowed", Codec.STRING)
