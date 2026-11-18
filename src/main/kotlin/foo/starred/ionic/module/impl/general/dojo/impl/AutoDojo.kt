@@ -17,17 +17,17 @@ object AutoDojo : Module(
     "Automatically does dojo",
     ConfigCategory.GENERAL
 ) {
-    val controlGroup by config.group("Control")
+    val controlGroup by config.group("Control", false)
     private val enabled0 = controlGroup.switch("Enable auto-control").unique("enabled0")
 
-    val disciplineGroup by config.group("Discipline")
-    private val enabled1 = controlGroup.switch("Enable auto-discipline").unique("enabled1")
+    val disciplineGroup by config.group("Discipline", false)
+    private val enabled1 = disciplineGroup.switch("Enable auto-discipline").unique("enabled1")
 
-    val forceGroup by config.group("Force")
-    private val enabled2 = controlGroup.switch("Enable auto-force").unique("enabled2")
+    val forceGroup by config.group("Force", false)
+    private val enabled2 = forceGroup.switch("Enable auto-force").unique("enabled2")
 
-    val masteryGroup by config.group("Force")
-    private val enabled3 = controlGroup.switch("Enable auto-mastery").unique("enabled3")
+    val masteryGroup by config.group("Mastery", false)
+    private val enabled3 = masteryGroup.switch("Enable auto-mastery").unique("enabled3")
 
     val current: Observable<AutoDojoType?> = Observable(null)
 
