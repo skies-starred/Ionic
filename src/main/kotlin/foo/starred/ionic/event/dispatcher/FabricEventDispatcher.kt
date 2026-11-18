@@ -12,8 +12,6 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.event.player.UseItemCallback
@@ -84,22 +82,6 @@ object FabricEventDispatcher {
         UseEntityCallback.EVENT.register { _, _, _, entity, _ ->
             val a = PlayerEvent.Interact.Entity(entity).post()
             val b = PlayerEvent.Interact.Any.post()
-
-            if (!a && !b) return@register InteractionResult.PASS
-            InteractionResult.FAIL
-        }
-
-        AttackBlockCallback.EVENT.register { _, _, _, pos, _ ->
-            val a = PlayerEvent.Attack.Block(pos).post()
-            val b = PlayerEvent.Attack.Any.post()
-
-            if (!a && !b) return@register InteractionResult.PASS
-            InteractionResult.FAIL
-        }
-
-        AttackEntityCallback.EVENT.register { _, _, _, entity, _ ->
-            val a = PlayerEvent.Attack.Entity(entity).post()
-            val b = PlayerEvent.Attack.Any.post()
 
             if (!a && !b) return@register InteractionResult.PASS
             InteractionResult.FAIL
