@@ -32,10 +32,12 @@ object MasteryDojoSolver {
     init {
         on<BlockUpdateEvent> {
             when {
+                //~ if >= 26.2 'Blocks.RED_WOOL' -> 'Blocks.WOOL.red()'
                 old.block == Blocks.RED_WOOL -> {
                     blocks -= pos
                 }
 
+                //~ if >= 26.2 'Blocks.LIME_WOOL' -> 'Blocks.WOOL.lime()'
                 new.block == Blocks.LIME_WOOL -> {
                     val player = client.player ?: return@on
                     if (player.distanceToSqr(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()) > 400) return@on
