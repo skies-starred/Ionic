@@ -1,3 +1,9 @@
+/**
+ * A rewritten and "improved" version of NoammAddon's PlayerUtils rotation code. The NoammAddons code was used as a reference for some parts.
+ * NoammAddons is licensed under Creative Commons Zero v1.0 Universal (https://github.com/Noamm9/NoammAddons/blob/multiversion/LICENSE)
+ * Modifications to this file are licensed under BSD-3 Clause License (https://data.starred.foo/LICENSE.txt)
+ */
+
 @file:Suppress("LocalVariableName")
 
 package foo.starred.ionic.api.player.rotation
