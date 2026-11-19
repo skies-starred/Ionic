@@ -16,6 +16,7 @@ import foo.starred.cascade.graphics.geometry.CascadeGeometricColor
 import foo.starred.cascade.graphics.geometry.CascadeGeometricOffset
 import foo.starred.cascade.graphics.geometry.CascadeGeometricRadius
 import foo.starred.cascade.primitives.base.impl.IPrimitiveElement
+import foo.starred.cascade.primitives.base.interfaces.IPrimitiveTypable
 import foo.starred.cascade.primitives.impl.RoundedRectanglePrimitive
 import foo.starred.ionic.config.ConfigManager
 import foo.starred.ionic.config.data.impl.ConfigTextInputElementData
@@ -32,7 +33,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.time.Duration.Companion.milliseconds
 
-open class ConfigInputElement : RoundedRectanglePrimitive() {
+open class ConfigInputElement : RoundedRectanglePrimitive(), IPrimitiveTypable {
     private var update: ((String) -> Unit)? = null
     private var _cursor: Float = 0f
     private var _selection0: Float = 0f
