@@ -102,10 +102,12 @@ object AutoFish : Module(
             val slot0 = MinecraftInventory.selected
 
             MinecraftInventory.selected = slot
-            RotationPlayerAPI.smooth(yaw0, 90f, 150)
+            RotationPlayerAPI.smooth(yaw0, 90f, 150).invokeOnCompletion {
+                if (it != null) return@invokeOnCompletion
 
-            IonicScheduler.schedule((2..4).random().clientTicks.start) {
-                hyperion(`hyperion$clicks`, slot0, yaw0, pitch0)
+                IonicScheduler.schedule((2..4).random().clientTicks.start) {
+                    hyperion(`hyperion$clicks`, slot0, yaw0, pitch0)
+                }
             }
         }.runWhen(`hyperion$enabled`.state)
 
