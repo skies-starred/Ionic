@@ -1,15 +1,7 @@
 package foo.starred.ionic.module.impl.general.wardrobe.keybind.data
 
 import com.mojang.blaze3d.platform.InputConstants
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key0
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key1
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key2
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key3
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key4
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key5
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key6
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key7
-import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds.key8
+import foo.starred.ionic.module.impl.general.wardrobe.keybind.impl.WardrobeKeybinds
 import foo.starred.kontext.abstraction.client.extension.boundKey
 import foo.starred.kontext.abstraction.client.extension.client
 import net.minecraft.world.inventory.Slot
@@ -37,15 +29,15 @@ data class WardrobeKeybindSlot(
 
     companion object {
         val ALL = listOf(
-            WardrobeKeybindSlot(36) { key0 },
-            WardrobeKeybindSlot(37) { key1 },
-            WardrobeKeybindSlot(38) { key2 },
-            WardrobeKeybindSlot(39) { key3 },
-            WardrobeKeybindSlot(40) { key4 },
-            WardrobeKeybindSlot(41) { key5 },
-            WardrobeKeybindSlot(42) { key6 },
-            WardrobeKeybindSlot(43) { key7 },
-            WardrobeKeybindSlot(44) { key8 }
+            WardrobeKeybindSlot(36) { WardrobeKeybinds.key0 },
+            WardrobeKeybindSlot(37) { WardrobeKeybinds.key1 },
+            WardrobeKeybindSlot(38) { WardrobeKeybinds.key2 },
+            WardrobeKeybindSlot(39) { WardrobeKeybinds.key3 },
+            WardrobeKeybindSlot(40) { WardrobeKeybinds.key4 },
+            WardrobeKeybindSlot(41) { WardrobeKeybinds.key5 },
+            WardrobeKeybindSlot(42) { WardrobeKeybinds.key6 },
+            WardrobeKeybindSlot(43) { WardrobeKeybinds.key7 },
+            WardrobeKeybindSlot(44) { WardrobeKeybinds.key8 }
         )
     }
 }

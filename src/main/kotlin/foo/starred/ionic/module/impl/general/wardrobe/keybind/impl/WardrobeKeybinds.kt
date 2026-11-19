@@ -17,6 +17,7 @@ import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.kontext.abstraction.input.impl.GenericInputState
 import foo.starred.kontext.abstraction.input.impl.KeyboardInputState
+import foo.starred.kontext.abstraction.input.impl.MouseInputState
 import foo.starred.kontext.api.data.Observable
 import foo.starred.kontext.api.scheduling.scheduler.extensions.clientTicks
 import foo.starred.kontext.api.scheduling.scheduler.extensions.start
@@ -35,9 +36,9 @@ object WardrobeKeybinds : Module(
     private val ping by config.slider("Ping", 250, 10, 1000, "ms").description("Ping is used to estimate internal calculations.")
 
     private val keybinds by config.group("General keybinds")
-    private val useHotbar by keybinds.switch("Use hotbar binds", true)
-    private val prevPage by keybinds.keybind("Previous page")
-    private val nextPage by keybinds.keybind("Next page")
+    private val hotbar by keybinds.switch("Use hotbar binds", true)
+    private val previous by keybinds.keybind("Previous page")
+    private val next by keybinds.keybind("Next page")
 
     private val swaps by config.group("Swap keybinds")
     private val swapKey by swaps.switch("Swap key")
@@ -81,7 +82,7 @@ object WardrobeKeybinds : Module(
         }.runWhen(open)
 
         on<GuiEvent.Input.Mouse.Press> {
-            fn(KeyboardInputState.vanilla(keyEvent.button()))
+            fn(MouseInputState.vanilla(keyEvent.button()))
         }.runWhen(open)
     }
 
@@ -94,13 +95,13 @@ object WardrobeKeybinds : Module(
         if (System.currentTimeMillis() - last < ping) return
         val player = client.player ?: return
 
-        if (key == prevPage) {
-            if (current > 1) MinecraftGui.click(player.containerMenu.containerId, 45)
+        if (key == previous) {
+            if (current > 1) click(player.containerMenu.containerId, 45, false)
             return
         }
 
-        if (key == nextPage) {
-            if (current < max) MinecraftGui.click(player.containerMenu.containerId, 53)
+        if (key == next) {
+            if (current < max) click(player.containerMenu.containerId, 53, false)
             return
         }
 
@@ -111,21 +112,21 @@ object WardrobeKeybinds : Module(
             val index = if (slot1.equipped) slot2.index else slot1.index
 
             click(player.containerMenu.containerId, index)
-            cancel()
             return
         }
 
-        val slot = WardrobeKeybindSlot.ALL.find { it.value(useHotbar) == key }?.takeIf { it.slot?.item?.isEmpty == false } ?: return // slot can be empty on high ping, yay!
+        val slot = WardrobeKeybindSlot.ALL.find { it.value(hotbar) == key }?.takeIf { it.slot?.item?.isEmpty == false } ?: return // slot can be empty on high ping, yay!
         if (slot.equipped && preventUnequip) return
 
         click(player.containerMenu.containerId, slot.index)
-        cancel()
     }
 
-    private fun click(id: Int, index: Int) {
+    private fun KBusCancellableTrait.click(id: Int, index: Int, close: Boolean = true) {
         MinecraftGui.click(id, index)
         last = System.currentTimeMillis()
+        cancel()
 
+        if (!close) return
         if (!autoClose) return
         IonicScheduler.schedule((1..3).random().clientTicks.start) {
             val player = client.player ?: return@schedule
