@@ -46,12 +46,12 @@ object AutoHarp : Module(
             var slot = -1
 
             for (index in 28..43) {
-                val quartz = slots.getOrNull(index)?.item?.item == Items.QUARTZ_BLOCK
-                hash0 = (hash0 shl 1) or if (quartz) 1 else 0
+                val stack = slots.getOrNull(index)?.item ?: continue
+                hash0 = 31 * hash0 + stack.item.hashCode()
 
                 if (slot != -1) continue
                 if (index !in 37..43) continue
-                if (!quartz) continue
+                if (stack.item != Items.QUARTZ_BLOCK) continue
 
                 slot = index
             }
