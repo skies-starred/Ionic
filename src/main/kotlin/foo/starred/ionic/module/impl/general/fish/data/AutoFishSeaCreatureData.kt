@@ -80,8 +80,7 @@ enum class AutoFishSeaCreatureData(val island: PresetSkyBlockIsland?, val messag
             "You hear a massive rumble as Thunder emerges.",
             "You have angered a legendary creature... Lord Jawbus has arrived.",
             "WOAH! A Plhlegblast appeared.",
-            "The sky darkens and the air thickens. The end times are upon us: Ragnarok is here.",
-            "A Vanquisher is spawning nearby!",
+            "The sky darkens and the air thickens. The end times are upon us: Ragnarok is here."
         )
     ),
     OASIS(
