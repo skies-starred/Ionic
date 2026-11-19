@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
     @Inject(method = "update", at = @At("HEAD"))
+    //~ if >= 26.3 'DeltaTracker deltaTracker, boolean advanceGameTime, CallbackInfo ci' -> 'DeltaTracker deltaTracker, CallbackInfo ci'
     private void ionic$update(DeltaTracker deltaTracker, boolean advanceGameTime, CallbackInfo ci) {
         RotationPlayerAPI.INSTANCE.frame();
     }

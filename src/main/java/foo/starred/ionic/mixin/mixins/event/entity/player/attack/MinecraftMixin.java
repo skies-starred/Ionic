@@ -18,6 +18,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+//? if >= 26.3 {
+/*import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.item.component.SwingAnimation;
+*///? }
+
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
     @Unique
@@ -47,8 +53,20 @@ public class MinecraftMixin {
         return original.call(instance, pos, direction);
     }
 
+    //? if >= 26.3 {
+    /*@WrapOperation(method = "startAttack()Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z"))
+    private boolean ionic$startAttack$swing(LocalPlayer instance, InteractionHand hand, SwingAnimation animation, boolean flag, Operation<Boolean> original) {
+        if (ionic$cancel) return false;
+        return original.call(instance, hand, animation, flag);
+    }
+
+    @WrapWithCondition(method = "startAttack()Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
+    private boolean ionic$startAttack$packet(ClientPacketListener instance, Packet<?> packet) {
+        return !ionic$cancel;
+    }
+    *///? } else {
     @WrapWithCondition(method = "startAttack()Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", ordinal = 1))
     private boolean ionic$startAttack$swing(LocalPlayer instance, InteractionHand hand) {
         return !ionic$cancel;
-    }
+    }//? }
 }
