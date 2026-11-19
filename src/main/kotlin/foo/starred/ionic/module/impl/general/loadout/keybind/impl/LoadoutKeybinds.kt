@@ -33,9 +33,9 @@ object LoadoutKeybinds : Module(
     private val ping by config.slider("Ping", 250, 10, 1000, "ms").description("Ping is used to estimate internal calculations.")
 
     private val keybinds by config.group("General keybinds")
-    private val useHotbar by keybinds.switch("Use hotbar binds", true)
-    private val prevPage by keybinds.keybind("Previous page")
-    private val nextPage by keybinds.keybind("Next page")
+    private val hotbar by keybinds.switch("Use hotbar binds", true)
+    private val previous by keybinds.keybind("Previous page")
+    private val next by keybinds.keybind("Next page")
 
     private val swaps by config.group("Swap keybinds")
     private val swapKey by swaps.switch("Swap key")
@@ -96,13 +96,13 @@ object LoadoutKeybinds : Module(
         val player = client.player ?: return
         val container = player.containerMenu
 
-        if (key == prevPage) {
-            if (current > 1) MinecraftGui.click(container.containerId, 17)
+        if (key == previous) {
+            if (current > 1) click(container.containerId, 17, false)
             return
         }
 
-        if (key == nextPage) {
-            if (current < max) MinecraftGui.click(container.containerId, 44)
+        if (key == next) {
+            if (current < max) click(container.containerId, 44, false)
             return
         }
 
@@ -113,19 +113,21 @@ object LoadoutKeybinds : Module(
             val index = if (slot1.equipped) slot2.index else slot1.index
 
             click(container.containerId, index)
-            cancel()
             return
         }
 
-        val slot = LoadoutKeybindSlot.ALL.find { it.value(useHotbar) == key }?.takeIf { it.slot?.item?.isEmpty == false } ?: return // slot can be empty on high ping, yay!
+        val slot = LoadoutKeybindSlot.ALL.find { it.value(hotbar) == key }?.takeIf { it.slot?.item?.isEmpty == false } ?: return
+        if (slot.equipped) return
+
         click(container.containerId, slot.index)
-        cancel()
     }
 
-    private fun click(id: Int, index: Int) {
+    private fun KBusCancellableTrait.click(id: Int, index: Int, close: Boolean = true) {
         MinecraftGui.click(id, index)
         last = System.currentTimeMillis()
+        cancel()
 
+        if (!close) return
         if (!autoClose) return
         IonicScheduler.schedule((1..3).random().clientTicks.start) {
             val player = client.player ?: return@schedule
