@@ -27,6 +27,7 @@ dependencies {
 
     localRuntime(libs.devauth)
 
+    implementation(lib["modmenu"])
     implementation(lib["fabric-api"])
     implementation(libs.fabric.loader)
     implementation(libs.fabric.language.kotlin)

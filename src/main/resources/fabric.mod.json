@@ -17,6 +17,12 @@
         "value": "foo.starred.ionic.Ionic",
         "adapter": "kotlin"
       }
+    ],
+    "modmenu": [
+      {
+        "value": "foo.starred.ionic.config.modmenu.ModMenuCompatibility",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
