@@ -67,7 +67,7 @@ object AutoTwilight : Module(
         }.runWhen(hits.state)
     }
 
-    fun refill(amount: Int) {
+    private fun refill(amount: Int) {
         val count = client.player?.inventory?.find { it.get<GenericKontextItemDataResolver.ID, String>() == "TWILIGHT_ARROW_POISON" }?.count ?: 0
         if (count >= amount) return
 
