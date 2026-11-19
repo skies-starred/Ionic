@@ -13,6 +13,8 @@ import foo.starred.ionic.module.impl.general.refill.data.AutoRefillItemData
 import foo.starred.kbus.extensions.runWhen
 import foo.starred.kontext.abstraction.chat.command.MinecraftCommands
 import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.api.item.extension.get
+import foo.starred.kontext.api.item.resolver.impl.GenericKontextItemDataResolver
 
 @LoadableIonicModule
 @IonicModuleScope(skyblock = true)
@@ -28,17 +30,23 @@ object AutoRefill : Module(
 
     private val kuudra by config.group("Kuudra")
     private val `kuudra$pearl` by kuudra.switch("Refill pearls on supply", true)
+    private val `kuudra$build` by kuudra.switch("Refill toxic on build end", true)
+    private val `kuudra$build$amount` by kuudra.slider("Toxic amount to get", 32, 1, 64)
 
     private val kuudraRegex = Regex("(?:\\[[^]]*] )?(?<user>\\w+) recovered one of Elle's supplies! \\(\\d+/\\d+\\)")
 
     init {
         on<MessageEvent.Chat.Receive> {
-            if (!`kuudra$pearl`) return@on
+            when {
+                `kuudra$pearl` -> {
+                    val name = kuudraRegex.matchEntire(stripped)?.groups["user"]?.value
+                    if (name == client.user.name) AutoRefillItemData.ENDER_PEARL.refill()
+                }
 
-            val name = kuudraRegex.matchEntire(stripped)?.groups["user"]?.value ?: return@on
-            if (client.user.name != name) return@on
-
-            AutoRefillItemData.ENDER_PEARL.refill()
+                `kuudra$build` && stripped == "[NPC] Elle: Phew! The Ballista is finally ready! It should be strong enough to tank Kuudra's blows now!" -> {
+                    toxic(`kuudra$build$amount`)
+                }
+            }
         }.runWhen(PresetSkyBlockIsland.KUUDRA.state)
 
         on<MessageEvent.Chat.Receive> {
@@ -54,5 +62,12 @@ object AutoRefill : Module(
                 }
             }
         }.runWhen(PresetSkyBlockIsland.THE_CATACOMBS.state)
+    }
+
+    private fun toxic(amount: Int) {
+        val count = client.player?.inventory?.find { it.get<GenericKontextItemDataResolver.ID, String>() == "TOXIC_ARROW_POISON" }?.count ?: 0
+        if (count >= amount) return
+
+        MinecraftCommands.client("/gfs TOXIC_ARROW_POISON ${amount - count}")
     }
 }
