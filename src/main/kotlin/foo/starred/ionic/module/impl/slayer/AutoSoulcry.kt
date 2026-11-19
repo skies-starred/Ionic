@@ -42,7 +42,7 @@ object AutoSoulcry : Module(
             val player = client.player ?: return@on reset()
             val item = player.mainHandItem
 
-            if (item.get<GenericKontextItemDataResolver.UUID, String>() !in ids) return@on reset()
+            if (item.get<GenericKontextItemDataResolver.ID, String>() !in ids) return@on reset()
             if (hitbox && (client.hitResult as? EntityHitResult)?.entity != slayer.entity) return@on
             if (player.cooldowns.isOnCooldown(item)) return@on
 
@@ -60,7 +60,7 @@ object AutoSoulcry : Module(
             val player = client.player ?: return@on reset()
             val item = player.mainHandItem
 
-            if (item.get<GenericKontextItemDataResolver.UUID, String>() !in ids) return@on
+            if (item.get<GenericKontextItemDataResolver.ID, String>() !in ids) return@on
             if (player.cooldowns.isOnCooldown(item)) return@on
 
             GenericPlayerAPI.use()
