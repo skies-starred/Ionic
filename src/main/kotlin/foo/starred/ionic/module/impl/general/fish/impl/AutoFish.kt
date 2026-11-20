@@ -55,6 +55,8 @@ object AutoFish : Module(
     private val `fb$enabled` = fb.switch("Enable auto FB").description("Moves the player if you're wearing FB").unique($$"fb$enabled")
     private val `fb$move` by fb.slider("Move every", 20, 5, 40, "seconds")
 
+    private val blacklist = setOf("SOUL_WHIP", "FLAMING_FLAY")
+
     private var bobber: FishingHook? = null
     private var `fb$last` = 0
 
@@ -62,10 +64,9 @@ object AutoFish : Module(
         on<EntityEvent.Load> {
             val entity = entity as? FishingHook ?: return@on
             val player = client.player ?: return@on
-            if (entity.owner != player) return@on
 
-            val id = player.mainHandItem.get<GenericKontextItemDataResolver.ID, String>() ?: return@on
-            if (id == "SOUL_WHIP" || id == "FLAMING_FLAY") return@on
+            if (entity.owner != player) return@on
+            if (!check()) return@on
 
             bobber = entity
         }
@@ -140,12 +141,23 @@ object AutoFish : Module(
             if (!enabled) return@repeat
             if (!`recast$enabled`) return@repeat
             if (!`recast$check`) return@repeat
-            if (client.player == null) return@repeat
             if (bobber?.isAlive == true) return@repeat
-            if (client.player?.mainHandItem?.item != Items.FISHING_ROD) return@repeat
+            if (!check()) return@repeat
 
             GenericPlayerAPI.use()
         }
+    }
+
+    private fun check(): Boolean {
+        val player = client.player ?: return false
+
+        val held = player.mainHandItem.takeIf { !it.isEmpty } ?: return false
+        if (held.item != Items.FISHING_ROD) return false
+
+        val id = held.get<GenericKontextItemDataResolver.ID, String>() ?: return false
+        if (id in blacklist) return false
+
+        return true
     }
 
     private fun hyperion(remaining: Int, slot: Int, yaw: Float, pitch: Float) {
