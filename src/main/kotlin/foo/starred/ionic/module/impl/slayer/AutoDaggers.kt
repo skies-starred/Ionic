@@ -4,8 +4,8 @@ import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.location.island.impl.PresetSkyBlockIsland
 import foo.starred.ionic.api.player.generic.GenericPlayerAPI
+import foo.starred.ionic.api.skyblock.entity.duck.EntityDuck.Companion.attachedNames
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
-import foo.starred.ionic.duck.entity.generic.EntityDuck.Companion.attachedNames
 import foo.starred.ionic.event.impl.PlayerEvent
 import foo.starred.ionic.event.impl.SlayerEvent
 import foo.starred.ionic.event.impl.TickEvent

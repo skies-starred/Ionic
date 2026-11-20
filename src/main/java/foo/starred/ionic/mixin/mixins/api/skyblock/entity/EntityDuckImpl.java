@@ -33,10 +33,10 @@
  * The original MIT license applies to the portions derived from SkyblockAPI.
  */
 
-package foo.starred.ionic.mixin.mixins.duck.entity.generic;
+package foo.starred.ionic.mixin.mixins.api.skyblock.entity;
 
-import foo.starred.ionic.api.skyblock.EntityAPI;
-import foo.starred.ionic.duck.entity.generic.EntityDuck;
+import foo.starred.ionic.api.skyblock.entity.impl.EntityAPI;
+import foo.starred.ionic.api.skyblock.entity.duck.EntityDuck;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import org.jetbrains.annotations.NotNull;

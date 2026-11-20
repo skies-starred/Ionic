@@ -1,8 +1,9 @@
 @file:Suppress("FunctionName", "Unused")
 
-package foo.starred.ionic.duck.entity.generic
+package foo.starred.ionic.api.skyblock.entity.duck
 
-import foo.starred.kontext.api.format.extension.string.stripped
+import foo.starred.kontext.api.entity.extension.get
+import foo.starred.kontext.api.entity.resolver.impl.GenericKontextEntityDataResolver
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
 import java.lang.ref.WeakReference
@@ -23,6 +24,6 @@ interface EntityDuck {
             get() = attached.mapNotNull { it.customName }
 
         val Entity.attachedStripped: List<String>
-            get() = attached.mapNotNull { it.customName?.stripped() }
+            get() = attached.mapNotNull { it.get<GenericKontextEntityDataResolver.CUSTOM_NAME, String>() }
     }
 }

@@ -1,11 +1,7 @@
 package foo.starred.ionic.event.dispatcher
 
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
-import foo.starred.ionic.event.impl.EntityEvent
-import foo.starred.ionic.event.impl.GuiEvent
-import foo.starred.ionic.event.impl.MessageEvent
-import foo.starred.ionic.event.impl.PlayerEvent
-import foo.starred.ionic.event.impl.TickEvent
+import foo.starred.ionic.event.impl.*
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents

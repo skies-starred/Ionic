@@ -34,11 +34,11 @@
  */
 @file:Suppress("ConstPropertyName", "LocalVariableName")
 
-package foo.starred.ionic.api.skyblock
+package foo.starred.ionic.api.skyblock.entity.impl
 
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.time.IonicScheduler
-import foo.starred.ionic.duck.entity.generic.EntityDuck
+import foo.starred.ionic.api.skyblock.entity.duck.EntityDuck
 import foo.starred.ionic.event.core.on
 import foo.starred.ionic.event.impl.EntityEvent
 import foo.starred.kontext.abstraction.client.extension.client
@@ -54,6 +54,7 @@ import net.minecraft.world.entity.monster.spider.CaveSpider
 import net.minecraft.world.entity.monster.spider.Spider
 import java.lang.ref.WeakReference
 import kotlin.math.abs
+import kotlin.text.get
 
 @LoadableIonicModule
 object EntityAPI {

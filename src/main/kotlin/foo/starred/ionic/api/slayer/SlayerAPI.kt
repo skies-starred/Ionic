@@ -8,7 +8,7 @@ import foo.starred.ionic.api.slayer.enums.type.impl.SlayerDemon
 import foo.starred.ionic.api.slayer.enums.type.impl.SlayerMini
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsDev
-import foo.starred.ionic.duck.entity.generic.EntityDuck.Companion.parent
+import foo.starred.ionic.api.skyblock.entity.duck.EntityDuck.Companion.parent
 import foo.starred.ionic.event.core.on
 import foo.starred.ionic.event.impl.EntityEvent
 import foo.starred.ionic.event.impl.LocationEvent

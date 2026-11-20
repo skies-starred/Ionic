@@ -5,6 +5,8 @@ package foo.starred.ionic.module.impl.general.loadout.auto.data
 import com.mojang.blaze3d.platform.InputConstants
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key0
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key1
+import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key10
+import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key11
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key2
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key3
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key4
@@ -13,8 +15,6 @@ import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key6
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key7
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key8
 import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key9
-import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key10
-import foo.starred.ionic.module.impl.general.loadout.auto.impl.AutoLoadout.key11
 import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.kontext.api.format.extension.string.stripped
 import foo.starred.kontext.api.item.extension.get
