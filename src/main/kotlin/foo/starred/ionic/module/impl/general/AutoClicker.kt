@@ -75,7 +75,7 @@ object AutoClicker : Module(
             val right = _right && `right$enabled` && GenericInputState.pressed(`right$key`)
 
             val hit = client.hitResult as? BlockHitResult
-            if (hit != null && !level.getBlockState(hit.blockPos).isAir && breaking) {
+            if (hit != null && !level.getBlockState(hit.blockPos).isAir && left && breaking) {
                 GenericInputState.press(client.options.keyAttack, true)
                 return@on
             }
@@ -98,6 +98,8 @@ object AutoClicker : Module(
         }
 
         on<InputEvent.Keyboard.Release> {
+            if (keyEvent.key() != `left$key`.value) return@on
+
             GenericInputState.press(client.options.keyAttack, false)
         }
     }
