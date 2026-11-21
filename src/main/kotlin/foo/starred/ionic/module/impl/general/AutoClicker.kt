@@ -42,7 +42,7 @@ object AutoClicker : Module(
 
     private val customisation by config.group("Customisation")
     private val jitter by customisation.slider("CPS jitter", 2, 1, 3, "clicks")
-    private val breaking by customisation.switch("Allow breaking blocks", true)
+    private val breaking by customisation.switch("Allow breaking blocks", true).description("This has a very small chance to flag as it immediately holds down the button.")
     private val breaker by customisation.switch("Block dungeon breaker", true)
     private val whitelist by customisation.switch("Whitelist mode")
 
