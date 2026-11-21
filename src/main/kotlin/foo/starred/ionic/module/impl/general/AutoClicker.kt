@@ -3,7 +3,6 @@
 package foo.starred.ionic.module.impl.general
 
 import com.mojang.serialization.Codec
-import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.command.command
 import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsMod
@@ -25,7 +24,6 @@ import foo.starred.kontext.api.text.parser.impl.parse
 import net.minecraft.world.phys.BlockHitResult
 
 @LoadableIonicModule
-@IonicModuleScope(skyblock = true)
 object AutoClicker : Module(
     "Auto clicker",
     "Automatically clicks for you!",
