@@ -5,6 +5,7 @@ import foo.starred.ionic.event.impl.*
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
@@ -22,6 +23,14 @@ object FabricEventDispatcher {
 
         ClientTickEvents.END_CLIENT_TICK.register {
             TickEvent.Client.End.post()
+        }
+
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            LocationEvent.Server.Connect.post()
+        }
+
+        ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
+            LocationEvent.Server.Disconnect.post()
         }
 
         ClientEntityEvents.ENTITY_LOAD.register { entity, _ ->
