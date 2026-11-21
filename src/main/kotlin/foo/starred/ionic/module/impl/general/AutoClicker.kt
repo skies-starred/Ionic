@@ -21,6 +21,7 @@ import foo.starred.kontext.api.item.extension.get
 import foo.starred.kontext.api.item.resolver.impl.GenericKontextItemDataResolver
 import foo.starred.kontext.api.storage.impl.generic.extension.mutableSet
 import foo.starred.kontext.api.text.parser.impl.parse
+import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.phys.BlockHitResult
 
 @LoadableIonicModule
@@ -73,7 +74,9 @@ object AutoClicker : Module(
             val right = _right && `right$enabled` && GenericInputState.pressed(`right$key`)
 
             val hit = client.hitResult as? BlockHitResult
-            if (hit != null && !level.getBlockState(hit.blockPos).isAir && left && breaking) {
+            val state = hit?.let { level.getBlockState(it.blockPos) }
+            val breakable = state != null && !state.isAir && state.block !is LiquidBlock
+            if (breakable && left && breaking) {
                 GenericInputState.press(client.options.keyAttack, true)
                 return@on
             }
