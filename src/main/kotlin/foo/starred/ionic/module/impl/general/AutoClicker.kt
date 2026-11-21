@@ -95,6 +95,12 @@ object AutoClicker : Module(
             }
         }
 
+        on<InputEvent.Mouse.Release> {
+            if (buttonInfo.button() != `left$key`.value) return@on
+
+            GenericInputState.press(client.options.keyAttack, false)
+        }
+
         on<InputEvent.Keyboard.Release> {
             if (keyEvent.key() != `left$key`.value) return@on
 
