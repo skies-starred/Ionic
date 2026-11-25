@@ -33,6 +33,7 @@ A  very cool "QoL" mod that's focused on general and slayer "QoL" features!
 
 ### Render
 - Camera tweaks
+- Corpse ESP
 - Ghost ESP
 - Pest ESP
 - Rat ESP
