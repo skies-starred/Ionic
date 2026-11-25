@@ -26,10 +26,10 @@ object Ionic : ClientModInitializer {
         IonicAnnotationLoader.init()
 
         command {
-            "toggle" / "feature" / string("key") {
-                val key = string("key")
+            "toggle" / "feature" / string("featureKey") {
+                val key = string("featureKey")
 
-                val boolean = ConfigManager.get(key) as? Boolean ?: return@string "Not a valid feature!".displayAsMod()
+                val boolean = ConfigManager.get(key) as? Boolean ?: return@string "Not a valid feature! featureKey must be the feature's name in camelCase!".displayAsMod()
                 ConfigManager.update(key, !boolean)
 
                 val name = key.replace(Regex("(?<!^)([A-Z])"), " $1").lowercase().replaceFirstChar { it.uppercase() }
