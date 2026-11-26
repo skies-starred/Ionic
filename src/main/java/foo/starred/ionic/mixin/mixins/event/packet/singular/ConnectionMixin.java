@@ -1,4 +1,4 @@
-package foo.starred.ionic.mixin.mixins.event.packet;
+package foo.starred.ionic.mixin.mixins.event.packet.singular;
 
 import foo.starred.ionic.event.impl.PacketEvent;
 import foo.starred.ionic.event.impl.TickEvent;
