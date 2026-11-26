@@ -5,22 +5,24 @@ package foo.starred.ionic.module.impl.render.corpse.impl
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
 import foo.starred.ionic.api.location.island.impl.PresetSkyBlockIsland
-import foo.starred.ionic.api.time.IonicScheduler
 import foo.starred.ionic.config.dsl.impl.category.ConfigCategory
 import foo.starred.ionic.config.theme.impl.catppuccin.MochaColorScheme
 import foo.starred.ionic.event.impl.EntityEvent
 import foo.starred.ionic.event.impl.LocationEvent
-import foo.starred.ionic.event.impl.MessageEvent
+import foo.starred.ionic.event.impl.PlayerEvent
 import foo.starred.ionic.event.impl.TickEvent
 import foo.starred.ionic.event.impl.WorldRenderEvent
 import foo.starred.ionic.module.base.Module
 import foo.starred.ionic.module.impl.render.corpse.data.CorpseTrackedData
 import foo.starred.ionic.module.impl.render.corpse.data.CorpseTypeData
 import foo.starred.kontext.abstraction.client.extension.client
-import foo.starred.kontext.api.scheduling.scheduler.extensions.serverTicks
+import foo.starred.kontext.api.item.extension.get
+import foo.starred.kontext.api.item.resolver.impl.GenericKontextItemDataResolver
 import foo.starred.parallax.api.primitives.ParallaxBox
 import foo.starred.parallax.api.primitives.ParallaxLine
 import foo.starred.parallax.api.primitives.ParallaxText
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.phys.Vec3
 import java.util.concurrent.ConcurrentHashMap
@@ -49,7 +51,7 @@ object CorpseESP : Module(
     val `colors$umber` by colors.colorPicker("Umber color", MochaColorScheme.Maroon.argb)
     val `colors$vanguard` by colors.colorPicker("Vanguard color", MochaColorScheme.Rosewater.argb)
 
-    private val regex = Regex("\\s+(\\w+) CORPSE LOOT!")
+    private val regex = Regex("^\\s+(\\w+) CORPSE LOOT!")
 
     private val tracked = ConcurrentHashMap.newKeySet<CorpseTrackedData>()
     private val claimed = mutableListOf<Vec3>()
@@ -61,35 +63,30 @@ object CorpseESP : Module(
             tracked.removeIf { !it.entity.isAlive }
         }
 
-        on<EntityEvent.Load> {
-            if (entity !is ArmorStand) return@on
-            if (entity.isInvisible) return@on
+        on<EntityEvent.Update.Equipment> {
+            if (!entity.check()) return@on
+            if (slots.none { it.first == EquipmentSlot.HEAD }) return@on
 
-            IonicScheduler.schedule(2.serverTicks) {
-                if (entity.isInvisible) return@schedule
-                val type = CorpseTypeData.get(entity) ?: return@schedule
+            val type = CorpseTypeData.get(entity) ?: return@on
+            val position = entity.position()
 
-                val position = entity.position()
-                if (claimed.any { it.distanceToSqr(position) < 25 }) return@schedule
+            if (claimed.any { it.distanceToSqr(position) < 4 }) return@on
+            if (tracked.any { it.entity.uuid == entity.uuid }) return@on
 
-                tracked += CorpseTrackedData(entity, type)
-            }
+            tracked += CorpseTrackedData(entity, type)
         }
 
-        on<EntityEvent.Unload> {
-            if (entity !is ArmorStand) return@on
-            if (entity.isInvisible) return@on
-
-            tracked.removeIf { it.entity == entity }
-        }
-
-        on<MessageEvent.Chat.Receive> {
-            if (!regex.matches(stripped)) return@on
+        on<PlayerEvent.Interact.Entity> {
             val player = client.player ?: return@on
-            val position = player.position()
+            if (!entity.check()) return@on
 
-            claimed += position
-            tracked.removeIf { it.entity.distanceToSqr(position) < 25 }
+            val type = CorpseTypeData.get(entity) ?: return@on
+            val id = player.mainHandItem.get<GenericKontextItemDataResolver.ID, String>() ?: return@on
+
+            if (type.key != null && type.key != id) return@on
+            if (!tracked.removeIf { it.entity == entity }) return@on
+
+            claimed += entity.position()
         }
 
         on<WorldRenderEvent.Extract> {
@@ -119,10 +116,13 @@ object CorpseESP : Module(
             claimed.clear()
             tracked.clear()
         }
+    }
 
-        on<LocationEvent.SkyBlock.Island> {
-            claimed.clear()
-            tracked.clear()
-        }
+    private fun Entity.check(): Boolean {
+        if (this !is ArmorStand) return false
+        if (customName != null) return false
+        if (isInvisible) return false
+
+        return true
     }
 }
