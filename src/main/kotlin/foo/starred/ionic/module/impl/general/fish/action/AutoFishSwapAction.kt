@@ -12,7 +12,7 @@ import foo.starred.kontext.api.scheduling.scheduler.extensions.start
 
 enum class AutoFishSwapAction(val rotate: Boolean) {
     HYPERION(true),
-    FIRE_VEIL(false),
+    FIRE_VEIL_WAND(false),
     SOUL_WHIP(false),
     FLAMING_FLAY(false);
 
