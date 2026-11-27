@@ -4,6 +4,7 @@ package foo.starred.ionic.module.impl.general.fish.impl
 
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
+import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsMod
 import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.player.movement.MovementPlayerAPI
 import foo.starred.ionic.api.player.rotation.RotationPlayerAPI
@@ -13,6 +14,7 @@ import foo.starred.ionic.event.impl.EntityEvent
 import foo.starred.ionic.event.impl.MessageEvent
 import foo.starred.ionic.event.impl.TickEvent
 import foo.starred.ionic.module.base.Module
+import foo.starred.ionic.module.impl.general.fish.action.AutoFishSwapAction
 import foo.starred.ionic.module.impl.general.fish.data.AutoFishSeaCreatureData
 import foo.starred.kbus.extensions.runWhen
 import foo.starred.kontext.abstraction.client.extension.client
@@ -22,9 +24,12 @@ import foo.starred.kontext.api.item.extension.get
 import foo.starred.kontext.api.item.resolver.impl.GenericKontextItemDataResolver
 import foo.starred.kontext.api.scheduling.scheduler.extensions.clientTicks
 import foo.starred.kontext.api.scheduling.scheduler.extensions.start
+import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.projectile.FishingHook
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.phys.HitResult
 import kotlin.random.Random
 
 @LoadableIonicModule
@@ -45,11 +50,12 @@ object AutoFish : Module(
     private val `recast$delay` by recast.slider("Recast delay", 1, 0, 10, "ticks")
     private val `recast$variance` by recast.slider("Delay variance", 0, 0, 5, "ticks")
 
-    private val hyperion by config.group("Auto hyperion", false)
-    private val `hyperion$enabled` = hyperion.switch("Enable auto hyperion").unique($$"hyperion$enabled")
-    private val `hyperion$clicks` by hyperion.slider("Hyperion clicks", 2, 1, 5, "clicks")
-    private val `hyperion$spread` by hyperion.slider("Hyperion look back variation", 2, 0, 10, "degrees")
-    private val `hyperion$recast` by hyperion.slider("Hyperion recast delay", 4, 0, 20, "ticks")
+    private val ability by config.group("Auto ability", false)
+    private val `ability$enabled` = ability.switch("Enable auto ability").description("Automatically uses items like Hyperion").unique($$"hyperion$enabled")
+    private val `ability$type` by ability.selector("Selected ability", AutoFishSwapAction.entries.map { it.display })
+    private val `ability$clicks` by ability.slider("Number of clicks", 2, 1, 5)
+    private val `ability$spread` by ability.slider("Look back variation", 2, 0, 10, "degrees")
+    private val `ability$recast` by ability.slider("Recast delay", 4, 0, 20, "ticks")
 
     private val fb by config.group("Auto FB", false)
     private val `fb$enabled` = fb.switch("Enable auto FB").description("Moves the player if you're wearing FB").unique($$"fb$enabled")
@@ -95,22 +101,13 @@ object AutoFish : Module(
         on<MessageEvent.Chat.Receive> {
             if (AutoFishSeaCreatureData.find(stripped) == null) return@on
 
-            val player = client.player ?: return@on
-            val slot = MinecraftInventory.hotbar?.indexOfFirst { it.get<GenericKontextItemDataResolver.ID, String>() == "HYPERION" }?.takeIf { it != -1 } ?: return@on
+            val selected = AutoFishSwapAction.entries.getOrNull(`ability$type`) ?: return@on
+            val slot = selected.tryFind() ?: return@on
 
-            val yaw0 = player.yRot
-            val pitch0 = player.xRot
-            val slot0 = MinecraftInventory.selected
-
-            MinecraftInventory.selected = slot
-            RotationPlayerAPI.smooth(yaw0, 90f, 150).invokeOnCompletion {
-                if (it != null) return@invokeOnCompletion
-
-                IonicScheduler.schedule((2..4).random().clientTicks.start) {
-                    hyperion(`hyperion$clicks`, slot0, yaw0, pitch0)
-                }
+            selected.action(slot) { yaw, pitch, last ->
+                use(`ability$clicks`, selected.rotate, last, yaw, pitch)
             }
-        }.runWhen(`hyperion$enabled`.state)
+        }.runWhen(`ability$enabled`.state)
 
         on<TickEvent.Client.Start> {
             if (++`fb$last` < `fb$move` * 20) return@on
@@ -160,24 +157,25 @@ object AutoFish : Module(
         return true
     }
 
-    private fun hyperion(remaining: Int, slot: Int, yaw: Float, pitch: Float) {
+    private fun use(remaining: Int, rotate: Boolean, slot: Int, yaw: Float, pitch: Float) {
         GenericPlayerAPI.use()
 
         if (remaining > 1) {
             IonicScheduler.schedule((2..5).random().clientTicks.start) {
-                hyperion(remaining - 1, slot, yaw, pitch)
+                use(remaining - 1, rotate, slot, yaw, pitch)
             }
 
             return
         }
 
         IonicScheduler.schedule((2..5).random().clientTicks.start) {
-            val spread = `hyperion$spread`.toFloat()
-
             MinecraftInventory.selected = slot
-            RotationPlayerAPI.smooth(yaw + (Random.nextFloat() * 2f - 1f) * spread, pitch + (Random.nextFloat() * 2f - 1f) * spread, 150)
 
-            IonicScheduler.schedule(`hyperion$recast`.clientTicks.start) {
+            if (rotate) {
+                RotationPlayerAPI.smooth(yaw + (Random.nextFloat() * 2f - 1f) * `ability$spread`, pitch + (Random.nextFloat() * 2f - 1f) * `ability$spread`, 150)
+            }
+
+            IonicScheduler.schedule(`ability$recast`.clientTicks.start) {
                 recast()
             }
         }
@@ -188,7 +186,7 @@ object AutoFish : Module(
 
         val recast = 2 + `recast$delay` + (0..`recast$variance`).random()
         IonicScheduler.schedule(recast.clientTicks.start) {
-            GenericPlayerAPI.use()
+            if (check()) GenericPlayerAPI.use()
         }
     }
 }
