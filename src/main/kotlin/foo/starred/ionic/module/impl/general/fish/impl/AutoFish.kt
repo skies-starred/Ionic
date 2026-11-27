@@ -4,7 +4,6 @@ package foo.starred.ionic.module.impl.general.fish.impl
 
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
-import foo.starred.ionic.api.messaging.impl.MessagingAPI.displayAsMod
 import foo.starred.ionic.api.player.generic.GenericPlayerAPI
 import foo.starred.ionic.api.player.movement.MovementPlayerAPI
 import foo.starred.ionic.api.player.rotation.RotationPlayerAPI
@@ -140,6 +139,7 @@ object AutoFish : Module(
             if (!`recast$check`) return@repeat
             if (bobber?.isAlive == true) return@repeat
             if (!check()) return@repeat
+            if (!fluid()) return@repeat
 
             GenericPlayerAPI.use()
         }
@@ -188,5 +188,19 @@ object AutoFish : Module(
         IonicScheduler.schedule(recast.clientTicks.start) {
             if (check()) GenericPlayerAPI.use()
         }
+    }
+
+    private fun fluid(): Boolean {
+        val player = client.player ?: return false
+        if (player.isEyeInFluid(FluidTags.WATER) || player.isEyeInFluid(FluidTags.LAVA)) return true
+
+        val level = player.level()
+        val start = player.eyePosition
+        val end = start.add(player.lookAngle.scale(20.0))
+
+        val hit = level.clip(ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, player))
+        if (hit.type != HitResult.Type.BLOCK) return false
+
+        return !level.getFluidState(hit.blockPos).isEmpty
     }
 }
