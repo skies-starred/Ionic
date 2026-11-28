@@ -34,7 +34,7 @@ object AutoSuperboom : Module(
     "Automatically swaps to and uses the superboom if clicking on a breakable wall.",
     ConfigCategory.DUNGEON
 ) {
-    private val _unused by config.information("Command: <red>/nebulune superboom [add|remove]")
+    private val _unused by config.information("Command: <red>/ionic superboom [add|remove]")
 
     private val minDelay by config.slider("Minimum delay", 1, 1, 5, "ticks")
     private val maxDelay by config.slider("Maximum delay", 3, 1, 5, "ticks")
