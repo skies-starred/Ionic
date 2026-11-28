@@ -1,7 +1,7 @@
 package foo.starred.ionic.mixin.mixins.feature.worldborderinteract;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import foo.starred.ionic.module.impl.general.WorldBorderInteract;
+import foo.starred.ionic.module.impl.dungeon.WorldBorderInteract;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

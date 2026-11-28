@@ -1,4 +1,4 @@
-package foo.starred.ionic.module.impl.general
+package foo.starred.ionic.module.impl.dungeon
 
 import foo.starred.ionic.annotation.impl.IonicModuleScope
 import foo.starred.ionic.annotation.impl.LoadableIonicModule
@@ -11,5 +11,5 @@ import foo.starred.ionic.module.base.Module
 object WorldBorderInteract : Module(
     "World border interact",
     "Fixes interaction cancel when outside world border (Shadow Assassin, Bonzo)",
-    ConfigCategory.GENERAL
+    ConfigCategory.DUNGEON
 )
