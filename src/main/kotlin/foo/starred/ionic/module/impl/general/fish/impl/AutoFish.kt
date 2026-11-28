@@ -46,13 +46,14 @@ object AutoFish : Module(
     private val recast by config.group("Auto recast", false)
     private val `recast$enabled` by recast.switch("Enable auto recast").description("Checks if the fishing rod is already being used, and uses it if not")
     private val `recast$check` by recast.switch("Recast check")
+    private val `recast$checkInterval` by recast.slider("Check interval", 300, 1, 600, "ticks")
     private val `recast$delay` by recast.slider("Recast delay", 1, 0, 10, "ticks")
     private val `recast$variance` by recast.slider("Delay variance", 0, 0, 5, "ticks")
 
     private val ability by config.group("Auto ability", false)
     private val `ability$enabled` = ability.switch("Enable auto ability").description("Automatically uses items like Hyperion").unique($$"hyperion$enabled")
     private val `ability$type` by ability.selector("Selected ability", AutoFishSwapAction.entries.map { it.display })
-    private val `ability$clicks` by ability.slider("Number of clicks", 2, 1, 5)
+    private val `ability$clicks` by ability.slider("Number of clicks", 2, 1, 20)
     private val `ability$spread` by ability.slider("Look back variation", 2, 0, 10, "degrees")
     private val `ability$recast` by ability.slider("Recast delay", 4, 0, 20, "ticks")
 
@@ -133,7 +134,7 @@ object AutoFish : Module(
             }
         }.runWhen(`fb$enabled`.state)
 
-        IonicScheduler.repeat((15 * 20).clientTicks.start) {
+        IonicScheduler.repeat(`recast$checkInterval`.clientTicks.start) {
             if (!enabled) return@repeat
             if (!`recast$enabled`) return@repeat
             if (!`recast$check`) return@repeat
