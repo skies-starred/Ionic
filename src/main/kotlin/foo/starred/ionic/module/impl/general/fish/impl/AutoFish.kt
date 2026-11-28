@@ -53,7 +53,7 @@ object AutoFish : Module(
     private val ability by config.group("Auto ability", false)
     private val `ability$enabled` = ability.switch("Enable auto ability").description("Automatically uses items like Hyperion").unique($$"hyperion$enabled")
     private val `ability$type` by ability.selector("Selected ability", AutoFishSwapAction.entries.map { it.display })
-    private val `ability$clicks` by ability.slider("Number of clicks", 2, 1, 5)
+    private val `ability$clicks` by ability.slider("Number of clicks", 2, 1, 20)
     private val `ability$spread` by ability.slider("Look back variation", 2, 0, 10, "degrees")
     private val `ability$recast` by ability.slider("Recast delay", 4, 0, 20, "ticks")
 
