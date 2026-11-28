@@ -46,6 +46,7 @@ object AutoFish : Module(
     private val recast by config.group("Auto recast", false)
     private val `recast$enabled` by recast.switch("Enable auto recast").description("Checks if the fishing rod is already being used, and uses it if not")
     private val `recast$check` by recast.switch("Recast check")
+    private val `recast$checkInterval` by recast.slider("Check interval", 300, 1, 600, "ticks")
     private val `recast$delay` by recast.slider("Recast delay", 1, 0, 10, "ticks")
     private val `recast$variance` by recast.slider("Delay variance", 0, 0, 5, "ticks")
 
@@ -133,7 +134,7 @@ object AutoFish : Module(
             }
         }.runWhen(`fb$enabled`.state)
 
-        IonicScheduler.repeat((15 * 20).clientTicks.start) {
+        IonicScheduler.repeat(`recast$checkInterval`.clientTicks.start) {
             if (!enabled) return@repeat
             if (!`recast$enabled`) return@repeat
             if (!`recast$check`) return@repeat
